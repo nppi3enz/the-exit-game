@@ -1,0 +1,18 @@
+$primary: blue;
+@import "~bulma/bulma";
+
+.timer{
+    text-align: center;
+    font-size: 10em;
+}
+.menu{
+    position: fixed;
+    left: 0;
+    bottom: 12px;
+    width: 100%;
+    // color: white;
+    text-align: center;
+}
+.menu button{
+    // font-size: 3em;
+}
