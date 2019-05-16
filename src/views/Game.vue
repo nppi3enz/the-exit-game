@@ -3,38 +3,42 @@
     <div class="container">
         <div class="columns is-mobile">
             <div class="column">
-                Team: xxxx {{statusGame}}
+                Team: xxxx
             </div>
             <div class="column">Status: {{statusServer}}</div>
-            <div class="column">Penalty: 00</div>
             <div class="column">Hint: 00</div>
         </div>
         <div class="timer">
             {{remainTime}}
         </div>
         <div class="columns">
-            <div class="column is-full">message</div>
+            <div class="column is-full">
+                <div class="has-text-danger has-text-centered">
+                    {{message}}
+                </div>
+            </div>
         </div>
     </div>
     <div class="menu">
         <div class="columns is-mobile">
-            <button class="column" @click="callHint" :disabled="!statusGame">
+            <button class="column hint" @click="callHint" :disabled="!statusGame">
                 <font-awesome-icon icon="lightbulb" size="3x" /><br>
                 Hint</button>
-            <button class="column" :disabled="!statusGame">
+            <button class="column penalty" :disabled="!statusGame">
                 <font-awesome-icon icon="skull-crossbones" size="3x" /><br>
                 Penalty
                 </button>
-            <button class="column" @click="callCode" :disabled="!statusGame">
+                <!-- !statusGame &&  -->
+            <button class="column code" @click="callCode" :disabled="!statusGame || checkFlagPenalty">
                 <font-awesome-icon icon="lock" size="3x" /><br>
                 Code</button>
         </div>
         <div class="columns is-mobile">
-            <button class="column" :disabled="!statusGame">
+            <button class="column review" :disabled="!statusGame">
                 <font-awesome-icon icon="search" size="3x" /><br>
                 Review Hints</button>
            
-            <button class="column" @click="callMachine" :disabled="!statusGame">
+            <button class="column machine" @click="callMachine" :disabled="!statusGame">
                 <font-awesome-icon icon="cog" size="3x"  /><br>
                 Machine</button>
         </div>
@@ -74,15 +78,21 @@ export default {
             timeFinish: null,
             remainTime: 'wait',
             user: '',
-            message: '',
-            messages: [],
+            message: 'ขอให้โชคดี :)',
             socket: io(HTTP_HOST),
             interval: null,
             game_puzzle: false,
-            game_musicbox: false
+            game_musicbox: false,
+            numPenalty: 0,
+            timePenalty: 0,
+            checkFlagPenalty: false
         }
     },
     mounted() {
+        if(localStorage.getItem('timePenalty')){
+            this.timePenalty = localStorage.getItem('timePenalty')
+        }
+        this.timePenalty
         this.socket.on('getStatusGame', (data) => {
             this.statusGame = data.gameStart
             this.timeFinish = data.timeFinish
@@ -118,6 +128,14 @@ export default {
         this.countdownTime()
     },
     methods: {
+        checkPenalty() {
+            if(this.timePenalty > Math.floor(Date.now() / 1000)) {
+                this.checkFlagPenalty = true
+                return true
+            }
+            this.checkFlagPenalty = false
+            return false
+        },
         countdownTime() {
             this.interval = setInterval(() => {
                 if(this.statusServer == "online" && this.statusGame == true) {
@@ -139,6 +157,7 @@ export default {
             var minutes = Math.floor(time / 60)
             var seconds = time - minutes * 60
             this.remainTime = pad(minutes)+":"+pad(seconds)
+            this.checkPenalty()
         },
         sendMessage(e) {
             e.preventDefault();
@@ -226,6 +245,13 @@ export default {
                             this.$swal({
                                 type: 'error',
                                 title: 'รหัสผ่านไม่ถูกต้อง'})
+                            this.numPenalty++
+                            if(this.numPenalty == 3){
+                                this.message = 'คุณถูกระงับไม่ให้ใส่รหัส 2 นาที'
+                                this.timePenalty = Math.floor(Date.now() / 1000) + 120
+                                localStorage.setItem("timePenalty", this.timePenalty);
+                                this.numPenalty = 0
+                            }
                             throw new Error("testset")
                         }
                         return response.json()

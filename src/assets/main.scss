@@ -16,8 +16,10 @@
     font-weight: normal;
     font-style: normal;
 }
-body{
+body, html{
     font-family: 'db_admanrounded_x';
+    background: $black;
+    color: $red;
 }
 .timer{
     text-align: center;
@@ -26,10 +28,33 @@ body{
 .menu{
     position: fixed;
     left: 0;
-    bottom: 12px;
+    bottom: 25px;
     width: 100%;
     // color: white;
     text-align: center;
+    button{
+        border:0px;
+        color: #fff;
+        &.penalty{
+            background: $red;
+        }
+        &.machine{
+            background: $green;
+        }
+        &.code{
+            background: $yellow;
+        }
+        &.hint{
+            background: $blue;
+        }
+        &.review{
+            background: $grey;
+        }
+        &:disabled{
+            color: #ccc;
+            opacity: 0.5;
+        }
+    }
 }
 .menu button{
     font-family: 'db_admanrounded_x';
