@@ -1,4 +1,4 @@
-$primary: blue;
+// $primary: blue;
 @import "~bulma/bulma";
 
 @font-face {
@@ -41,4 +41,28 @@ body{
 }
 .swal2-styled {
     font-family: 'db_admanrounded_x';
+}
+.puzzle{
+    background: white;
+    padding:10px;
+    .table{
+        margin:0 auto;
+        td{
+            // width:14%;
+            border:0px;
+            font-size:20px;
+            text-align: center;
+        }
+    }
+    .puzzle-footer{
+        margin-top: 10px;
+    }
+    .correctBox{
+        text-align: center;
+        h2{
+            font-size:1.5em;
+            color: $green;
+        }
+    }
+    
 }

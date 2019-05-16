@@ -15,10 +15,6 @@
         <div class="columns">
             <div class="column is-full">message</div>
         </div>
-        
-        <div>
-            {{timeStart}} / {{timeFinish}}
-        </div>
     </div>
     <div class="menu">
         <div class="columns is-mobile">
@@ -43,17 +39,25 @@
                 Machine</button>
         </div>
     </div>
+    <div v-bind:class="{modal: true, 'is-active': game_puzzle }">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <puzzle></puzzle>
+        </div>
+        <button  @click="closeBtn" class="modal-close is-large" aria-label="close"></button>
+    </div>
   </div>
 </template>
 
 <script>
-import io from 'socket.io-client';
+import io from 'socket.io-client'
+// import keyboard from 'vue-keyboard'
+import puzzle from './Puzzle'
 
-import keyboard from 'vue-keyboard';
 const HTTP_HOST = process.env.VUE_APP_HTTP_HOST
 export default {
     //name: 'App',
-    components: { keyboard },    
+    components: { puzzle },    
     data() {
         return {
             statusServer: 'wait..',
@@ -65,7 +69,8 @@ export default {
             message: '',
             messages: [],
             socket: io(HTTP_HOST),
-            interval: null
+            interval: null,
+            game_puzzle: false
         }
     },
     mounted() {
@@ -178,29 +183,18 @@ export default {
                 cancelButtonText: 'ยกเลิก',
                 showCancelButton: true,
                 confirmButtonText: 'ตกลง',
-                showLoaderOnConfirm: true,
-                preConfirm: (id) => {
-                    return fetch(`http://localhost:3001/machine/${id}`)
-                    .then(response => {
-                        if (!response.ok) {
-                            this.$swal({
-                                type: 'error',
-                                title: 'ไม่พบหมายเลขการ์ดนี้'})
-                            throw new Error("testset")
-                        }
-                        // console.log(response)
-                        return response.json()
-                    })
-                    .catch()
-                },
                 allowOutsideClick: () => !this.$swal.isLoading()
-                }).then((result) => {
-                    console.log(result)
-                    if (result.value.desc) {
-                        this.$swal({
-                            title: `${result.value.desc} ----`,
-                    //     imageUrl: result.value.avatar_url
-                        })
+                }).then((code) => {
+                    if(code.value == 40){ //musicbox
+                        //
+                    } else if(code.value == 31){ //puzzle
+                        this.game_puzzle = true
+                    } else {
+                        if(!code.dismiss) {
+                            this.$swal({
+                            type: 'error',
+                            title: 'ไม่พบหมายเลขการ์ดนี้'})
+                        }
                     }
                 })
         },
@@ -225,7 +219,6 @@ export default {
                                 title: 'รหัสผ่านไม่ถูกต้อง'})
                             throw new Error("testset")
                         }
-                        // console.log(response)
                         return response.json()
                     })
                     .catch()
@@ -238,6 +231,9 @@ export default {
                         })
                     }
                 })
+        },
+        closeBtn() {
+            this.game_puzzle = false
         }
     },
 
