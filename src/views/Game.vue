@@ -49,7 +49,7 @@
 <script>
 import io from 'socket.io-client';
 import keyboard from 'vue-keyboard';
-const HTTP_HOST = "http://192.168.43.223:3001"
+const HTTP_HOST = process.env.HTTP_HOST
 export default {
     //name: 'App',
     components: { keyboard },    
