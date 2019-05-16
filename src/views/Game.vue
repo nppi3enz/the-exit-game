@@ -46,6 +46,13 @@
         </div>
         <button  @click="closeBtn" class="modal-close is-large" aria-label="close"></button>
     </div>
+    <div v-bind:class="{modal: true, 'is-active': game_musicbox }">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <music-box></music-box>
+        </div>
+        <button  @click="closeBtn" class="modal-close is-large" aria-label="close"></button>
+    </div>
   </div>
 </template>
 
@@ -53,11 +60,12 @@
 import io from 'socket.io-client'
 // import keyboard from 'vue-keyboard'
 import puzzle from './Puzzle'
+import musicBox from './Musicbox'
 
 const HTTP_HOST = process.env.VUE_APP_HTTP_HOST
 export default {
     //name: 'App',
-    components: { puzzle },    
+    components: { puzzle, musicBox },    
     data() {
         return {
             statusServer: 'wait..',
@@ -70,7 +78,8 @@ export default {
             messages: [],
             socket: io(HTTP_HOST),
             interval: null,
-            game_puzzle: false
+            game_puzzle: false,
+            game_musicbox: false
         }
     },
     mounted() {
@@ -186,7 +195,7 @@ export default {
                 allowOutsideClick: () => !this.$swal.isLoading()
                 }).then((code) => {
                     if(code.value == 40){ //musicbox
-                        //
+                        this.game_musicbox = true
                     } else if(code.value == 31){ //puzzle
                         this.game_puzzle = true
                     } else {

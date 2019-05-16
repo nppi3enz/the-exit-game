@@ -21,7 +21,7 @@ body{
 }
 .timer{
     text-align: center;
-    font-size: 10em;
+    font-size: 8em;
 }
 .menu{
     position: fixed;
@@ -65,4 +65,33 @@ body{
         }
     }
     
+}
+.musicbox{
+    background: #fff;
+    padding:10px;
+    .checkbox-round {
+        width: 2.3em;
+        height: 2.3em;
+        background-color: white;
+        border-radius: 50%;
+        vertical-align: middle;
+        border: 1px solid #ddd;
+        -webkit-appearance: none;
+        outline: none;
+        cursor: pointer;
+        margin-top:8px;
+    }
+    .checkbox-round:checked {
+        background-color: $green;
+    }
+    .result{
+        padding-bottom: 10px;
+    }
+    .correctBox{
+        text-align: center;
+        h2{
+            font-size:1.5em;
+            color: $green;
+        }
+    }
 }
