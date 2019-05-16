@@ -29,7 +29,7 @@
                 <font-awesome-icon icon="skull-crossbones" size="3x" /><br>
                 Penalty
                 </button>
-            <button class="column" :disabled="!statusGame">
+            <button class="column" @click="callCode" :disabled="!statusGame">
                 <font-awesome-icon icon="lock" size="3x" /><br>
                 Code</button>
         </div>
@@ -68,11 +68,6 @@ export default {
         }
     },
     mounted() {
-        this.socket.on('SETTING', () => {
-            
-            //this.messages = [...this.messages, data];
-            // you can also do this.messages.push(data)
-        });
         this.socket.on('getStatusGame', (data) => {
             this.statusGame = data.gameStart
             this.timeFinish = data.timeFinish
@@ -104,6 +99,7 @@ export default {
                 this.countdownTime()
             }
         });
+        
         this.countdownTime()
     },
     methods: {
@@ -203,6 +199,41 @@ export default {
                         this.$swal({
                             title: `${result.value.desc} ----`,
                     //     imageUrl: result.value.avatar_url
+                        })
+                    }
+                })
+        },
+        callCode() {
+            this.$swal({
+                title: 'Code',
+                text: 'กรุณาใส่รหัสผ่าน 4 ตัว',
+                input: 'number',
+                inputAttributes: {
+                    autocapitalize: 'off'
+                },
+                cancelButtonText: 'ยกเลิก',
+                showCancelButton: true,
+                confirmButtonText: 'ตกลง',
+                showLoaderOnConfirm: true,
+                preConfirm: (id) => {
+                    return fetch(`${HTTP_HOST}/code/${id}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            this.$swal({
+                                type: 'error',
+                                title: 'รหัสผ่านไม่ถูกต้อง'})
+                            throw new Error("testset")
+                        }
+                        // console.log(response)
+                        return response.json()
+                    })
+                    .catch()
+                },
+                allowOutsideClick: () => !this.$swal.isLoading()
+                }).then((result) => {
+                    if (result.value.result) {
+                        this.$swal({
+                            title: result.value.result,
                         })
                     }
                 })
