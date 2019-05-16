@@ -50,8 +50,7 @@
 import io from 'socket.io-client';
 
 import keyboard from 'vue-keyboard';
-//var HTTP_HOST = process.env.HTTP_HOST
-const HTTP_HOST = "https://bs-theexitgame.herokuapp.com"
+const HTTP_HOST = process.env.VUE_APP_HTTP_HOST
 export default {
     //name: 'App',
     components: { keyboard },    
