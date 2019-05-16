@@ -3,8 +3,10 @@ const bodyParser = require('body-parser')
 
 const app = express();
 
-const server = app.listen(3001, function() {
-    console.log('server running on port 3001');
+var port = process.env.PORT || 5000;
+
+const server = app.listen(port, function() {
+    console.log("application is listening on:", port);
 });
 
 const io = require('socket.io')(server);
@@ -19,6 +21,7 @@ var setting_game = {
 }
 
 const hints = require('./db/hints')
+const codes = require('./db/codes')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -37,10 +40,6 @@ io.on('connection', function(socket) {
     });
     socket.on('SETTING', function() {
         io.emit('getStatusGame', setting_game)
-        // if(data == 'infogame'){
-        //     console.log(setting_game)
-        // }
-        // io.emit('SETTING', setting_game)
     });
     // socket.on('SEND_MESSAGE', function(data) {
     //     console.log(data)
@@ -108,6 +107,15 @@ app.get('/admin', (req, res) => {
 
 app.get('/hint/:id', (req, res) => {
     var obj = hints.find(hint => hint.id === req.params.id)
+    console.log(obj)
+    if(obj !== undefined) {
+        res.json(obj)
+    } else {
+        res.status(404).send('Not found');
+    }
+})
+app.get('/code/:id', (req, res) => {
+    var obj = codes.find(code => code.id === req.params.id)
     console.log(obj)
     if(obj !== undefined) {
         res.json(obj)
