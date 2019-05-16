@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser')
 
 const app = express();
 
@@ -16,6 +17,11 @@ var setting_game = {
     'timeStart': null,
     'timeFinish': null
 }
+
+const hints = require('./db/hints')
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
 
 // var date = new Date()
 
@@ -42,16 +48,22 @@ io.on('connection', function(socket) {
     // });
 });
 
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
 app.get('/start', (req, res) => {
-    
     var date = new Date()
     var timeFinish = date.getTime()/1000
 
     setting_game['gameStart'] = true
     setting_game['timeFinish'] = Math.floor(timeFinish+LIMIT_TIME)
     
+    io.emit('GAME', 'start')
     io.emit('getStatusGame', setting_game)
-    res.send('Start Game at 60 minutes')
+    res.send('Start Game finishTime : '+setting_game['timeFinish'])
 })
 app.get('/stop', (req, res) => {
     var date = new Date()
@@ -60,6 +72,7 @@ app.get('/stop', (req, res) => {
     setting_game['gameStart'] = false
     pauseTime = setting_game['timeFinish']-timeStart
 
+    io.emit('getStatusGame', setting_game)
     io.emit('GAME', 'pause')
     console.log("Pause Remain : " + pauseTime + " second" )
     res.send( "Pause Remain : " + pauseTime + " second" )
@@ -69,11 +82,41 @@ app.get('/resume', (req, res) => {
     var timeStart = Math.floor(date.getTime()/1000)
 
     setting_game['gameStart'] = true
-    // console.log(LIMIT_TIME-pauseTime)
     setting_game['timeFinish'] = timeStart + pauseTime
-    // console.log(setting_game['timeFinish'])
-
+    
     io.emit('getStatusGame', setting_game)
     io.emit('GAME', 'resume')
     res.send('Resumed')
 })
+app.get('/resume/:time', (req, res) => {
+    setting_game['gameStart'] = true
+    setting_game['timeFinish'] = req.params.time
+    
+    io.emit('getStatusGame', setting_game)
+    io.emit('GAME', 'resume')
+    res.send('Resumed')
+})
+app.get('/reset', (req, res) => {
+    setting_game['gameStart'] = false
+    io.emit('getStatusGame', setting_game)
+    io.emit('GAME', 'reset')
+    res.send('Reseted')
+})
+app.get('/admin', (req, res) => {
+    res.send('Admin')
+})
+
+app.get('/hint/:id', (req, res) => {
+    var obj = hints.find(hint => hint.id === req.params.id)
+    console.log(obj)
+    if(obj !== undefined) {
+        res.json(obj)
+    } else {
+        res.status(404).send('Not found');
+    }
+})
+// app.get('/machine/:id', (req, res) => {
+    // const updateIndex = books.findIndex(book => book.id === req.params.id)
+    // res.json(Object.assign(books[updateIndex], req.body))
+    // res.send('{"card":12, "desc":"MACH_12"}')
+// })

@@ -1,6 +1,24 @@
 $primary: blue;
 @import "~bulma/bulma";
 
+@font-face {
+    font-family: 'db_admanrounded_x';
+    src: url('fonts/db_admanrounded_x_bd_v3.2-webfont.woff2') format('woff2'),
+         url('fonts/db_admanrounded_x_bd_v3.2-webfont.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+
+}
+@font-face {
+    font-family: 'db_admanrounded_x';
+    src: url('fonts/db_admanrounded_x_v3.2-webfont.woff2') format('woff2'),
+         url('fonts/db_admanrounded_x_v3.2-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+body{
+    font-family: 'db_admanrounded_x';
+}
 .timer{
     text-align: center;
     font-size: 10em;
@@ -14,5 +32,13 @@ $primary: blue;
     text-align: center;
 }
 .menu button{
-    // font-size: 3em;
+    font-family: 'db_admanrounded_x';
+    font-size: 1.5rem;
+    clear:both;
+    svg{
+        clear:both;
+    }
+}
+.swal2-styled {
+    font-family: 'db_admanrounded_x';
 }
