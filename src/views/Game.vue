@@ -3,7 +3,7 @@
     <div class="container">
         <div class="columns is-mobile">
             <div class="column">
-                Team: xxxx
+                Team: {{name_team[team]}}
             </div>
             <div class="column">Status: {{statusServer}}</div>
             <div class="column">Hint: 00</div>
@@ -24,7 +24,7 @@
             <button class="column hint" @click="callHint" :disabled="!statusGame">
                 <font-awesome-icon icon="lightbulb" size="3x" /><br>
                 Hint</button>
-            <button class="column penalty" :disabled="!statusGame">
+            <button class="column penalty" @click="callPenalty" :disabled="!statusGame">
                 <font-awesome-icon icon="skull-crossbones" size="3x" /><br>
                 Penalty
                 </button>
@@ -62,11 +62,13 @@
 
 <script>
 import io from 'socket.io-client'
+import axios from 'axios'
+
 // import keyboard from 'vue-keyboard'
 import puzzle from './Puzzle'
 import musicBox from './Musicbox'
-
 const HTTP_HOST = process.env.VUE_APP_HTTP_HOST
+
 export default {
     //name: 'App',
     components: { puzzle, musicBox },    
@@ -77,7 +79,7 @@ export default {
             timeStart: null,
             timeFinish: null,
             remainTime: 'wait',
-            user: '',
+            team: '',
             message: 'ขอให้โชคดี :)',
             socket: io(HTTP_HOST),
             interval: null,
@@ -85,14 +87,19 @@ export default {
             game_musicbox: false,
             numPenalty: 0,
             timePenalty: 0,
-            checkFlagPenalty: false
+            checkFlagPenalty: false,
+            name_team: ['A','B','C','D','E','F']
         }
     },
     mounted() {
         if(localStorage.getItem('timePenalty')){
             this.timePenalty = localStorage.getItem('timePenalty')
         }
-        this.timePenalty
+        if(!localStorage.getItem('login')) {
+            this.$router.push('/') 
+        }
+        this.team = localStorage.getItem('login')
+        // this.timePenalty
         this.socket.on('getStatusGame', (data) => {
             this.statusGame = data.gameStart
             this.timeFinish = data.timeFinish
@@ -128,6 +135,15 @@ export default {
         this.countdownTime()
     },
     methods: {
+        callPenalty() {
+            axios.get(HTTP_HOST+'/penalty/'+this.team)
+                .then(response => {
+                    this.todos = response.data
+                })
+                .catch(error => {
+                console.log(error);
+            })
+        },
         checkPenalty() {
             if(this.timePenalty > Math.floor(Date.now() / 1000)) {
                 this.checkFlagPenalty = true

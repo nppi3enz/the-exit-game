@@ -26,6 +26,8 @@ const codes = require('./db/codes')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
+
+var totalPenalty = [0,0,0,0,0,0,0]
 // var date = new Date()
 
 // var setting_game = {
@@ -34,17 +36,12 @@ app.use(bodyParser.urlencoded({ extended: true }))
 // }
 
 io.on('connection', function(socket) {
-    socket.on('GAME', function(data) {
-        console.log(data)
+    socket.on('GAME', function() {
         io.emit('SETTING', setting_game)
     });
     socket.on('SETTING', function() {
         io.emit('getStatusGame', setting_game)
     });
-    // socket.on('SEND_MESSAGE', function(data) {
-    //     console.log(data)
-    //     io.emit('MESSAGE', data)
-    // });
 });
 
 app.use(function(req, res, next) {
@@ -52,7 +49,20 @@ app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
-
+//game
+app.get('/penalty/:id', (req, res) => {
+    totalPenalty[req.params.id] += 1
+    io.emit('ADMIN_PENALTY', totalPenalty)
+    res.send('penalty complete')
+    // var obj = hints.find(hint => hint.id === req.params.id)
+    // console.log(obj)
+    // if(obj !== undefined) {
+    //     res.json(obj)
+    // } else {
+    //     res.status(404).send('Not found');
+    // }
+})
+// timer
 app.get('/start', (req, res) => {
     var date = new Date()
     var timeFinish = date.getTime()/1000
