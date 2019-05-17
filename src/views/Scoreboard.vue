@@ -12,7 +12,7 @@
                     <font-awesome-icon icon="skull-crossbones" size="1x" /> {{totalPenalty[0]}}
                 </div>
                 <div class="column">
-                    <font-awesome-icon icon="lightbulb" size="1x" /> 0
+                    <font-awesome-icon icon="lightbulb" size="1x" /> {{totalHint[0].length}}
                 </div>
             </div>
             <div class="columns">
@@ -23,7 +23,7 @@
                     <font-awesome-icon icon="skull-crossbones" size="1x" /> {{totalPenalty[1]}}
                 </div>
                 <div class="column">
-                    <font-awesome-icon icon="lightbulb" size="1x" /> 0
+                    <font-awesome-icon icon="lightbulb" size="1x" /> {{totalHint[1].length}}
                 </div>
             </div>
             <div class="columns">
@@ -34,7 +34,7 @@
                     <font-awesome-icon icon="skull-crossbones" size="1x" /> {{totalPenalty[2]}}
                 </div>
                 <div class="column">
-                    <font-awesome-icon icon="lightbulb" size="1x" /> 0
+                    <font-awesome-icon icon="lightbulb" size="1x" /> {{totalHint[2].length}}
                 </div>
             </div>
             <div class="columns">
@@ -45,7 +45,7 @@
                     <font-awesome-icon icon="skull-crossbones" size="1x" /> {{totalPenalty[3]}}
                 </div>
                 <div class="column">
-                    <font-awesome-icon icon="lightbulb" size="1x" /> 0
+                    <font-awesome-icon icon="lightbulb" size="1x" /> {{totalHint[3].length}}
                 </div>
             </div>
             <div class="columns">
@@ -56,7 +56,7 @@
                     <font-awesome-icon icon="skull-crossbones" size="1x" /> {{totalPenalty[4]}}
                 </div>
                 <div class="column">
-                    <font-awesome-icon icon="lightbulb" size="1x" /> 0
+                    <font-awesome-icon icon="lightbulb" size="1x" /> {{totalHint[4].length}}
                 </div>
             </div>
             <div class="columns">
@@ -67,7 +67,7 @@
                     <font-awesome-icon icon="skull-crossbones" size="1x" /> {{totalPenalty[5]}}
                 </div>
                 <div class="column">
-                    <font-awesome-icon icon="lightbulb" size="1x" /> 0
+                    <font-awesome-icon icon="lightbulb" size="1x" /> {{totalHint[5].length}}
                 </div>
             </div>
         </div>
@@ -89,7 +89,8 @@ export default {
             timeFinish: null,
             interval: null,
             socket: io(HTTP_HOST),
-            totalPenalty: [0,0,0,0,0,0]
+            totalPenalty: [0,0,0,0,0,0],
+            totalHint: [[], [], [], [], [], []],
         }
     },
     mounted() {
@@ -125,6 +126,9 @@ export default {
         });
         this.socket.on('ADMIN_PENALTY', (data) => {
             this.totalPenalty = data
+        })
+        this.socket.on('ADMIN_HINT', (data) => {
+            this.totalHint = data
         })
 
     },

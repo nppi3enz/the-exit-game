@@ -10,43 +10,46 @@
           </div>
           <p class="help">{{error}}</p>
         </div>
-        <button class="button is-primary is-large" type="submit" @click="loginBtn">Submit</button>
+        <button class="button is-primary is-large" type="button" @click="loginBtn">Submit</button>
       </form>
     </div>
   </div>
 </template>
 
 <script>
+import io from 'socket.io-client'
+const HTTP_HOST = process.env.VUE_APP_HTTP_HOST
 
 export default {
   data() {
       return {
         error: '',
-        password: ''
+        password: '',
+        socket: io(HTTP_HOST),
       }
   },
+  // mounted: () => {
+  // },
   methods: {
     loginBtn() {
       if(this.password == 'aaa'){
-        localStorage.setItem('login', 0)
-        this.$router.push('Game') 
+        this.gotoRoom(0)
       } else if(this.password == 'bbb'){
-        localStorage.setItem('login', 1)
-        this.$router.push('Game') 
+        this.gotoRoom(1)
       } else if(this.password == 'ccc'){
-        localStorage.setItem('login', 2)
-        this.$router.push('Game') 
+        this.gotoRoom(2)
       } else if(this.password == 'ddd'){
-        localStorage.setItem('login', 3)
-        this.$router.push('Game') 
+        this.gotoRoom(3)
       } else if(this.password == 'eee'){
-        localStorage.setItem('login', 4)
-        this.$router.push('Game') 
+        this.gotoRoom(4)
       } else if(this.password == 'fff'){
-        localStorage.setItem('login', 5)
-        this.$router.push('Game') 
+        this.gotoRoom(5)
       }
       this.error = 'รหัสผ่านไม่ถูกต้อง'
+    },
+    gotoRoom(n){
+      localStorage.setItem('login', n)
+      this.$router.push('Game') 
     }
   }
 

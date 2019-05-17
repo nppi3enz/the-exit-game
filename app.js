@@ -26,8 +26,10 @@ const codes = require('./db/codes')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-
+var sessionTeam = [];
 var totalPenalty = [0,0,0,0,0,0,0]
+var totalHint = [[],[],[],[],[],[],[]]
+
 // var date = new Date()
 
 // var setting_game = {
@@ -41,6 +43,11 @@ io.on('connection', function(socket) {
     });
     socket.on('SETTING', function() {
         io.emit('getStatusGame', setting_game)
+    });
+    socket.on('LOGIN', function(result) {
+        // io.emit('getStatusGame', setting_game)
+        // console.log(result)
+        sessionTeam[result.team] = result.clientId
     });
 });
 
@@ -115,11 +122,16 @@ app.get('/admin', (req, res) => {
     res.send('Admin')
 })
 
-app.get('/hint/:id', (req, res) => {
+app.get('/hint/:id/:team', (req, res) => {
     var obj = hints.find(hint => hint.id === req.params.id)
-    console.log(obj)
     if(obj !== undefined) {
         res.json(obj)
+        if ( totalHint[req.params.team].indexOf(req.params.id) < 0) {
+            totalHint[req.params.team].push(req.params.id)
+        }
+        //sendback
+        io.to(sessionTeam[req.params.team]).emit('updateHint', totalHint[req.params.team].length)
+        io.emit('ADMIN_HINT', totalHint)
     } else {
         res.status(404).send('Not found');
     }

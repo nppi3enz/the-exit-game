@@ -6,7 +6,7 @@
                 Team: {{name_team[team]}}
             </div>
             <div class="column">Status: {{statusServer}}</div>
-            <div class="column">Hint: 00</div>
+            <div class="column">Hint: {{countHint}}</div>
         </div>
         <div class="timer">
             {{remainTime}}
@@ -88,7 +88,8 @@ export default {
             numPenalty: 0,
             timePenalty: 0,
             checkFlagPenalty: false,
-            name_team: ['A','B','C','D','E','F']
+            name_team: ['A','B','C','D','E','F'],
+            countHint: 0,
         }
     },
     mounted() {
@@ -107,6 +108,10 @@ export default {
         this.socket.on('connect', () => {
             if(this.socket.connected){
                 this.statusServer = "online"
+                this.socket.emit('LOGIN', {
+                    team: this.team,
+                    clientId: this.socket.id
+                });
             }
             this.callInfoGame()
         })
@@ -131,6 +136,9 @@ export default {
                 this.countdownTime()
             }
         });
+        this.socket.on('updateHint', (data) => {
+            this.countHint = data
+        })
         
         this.countdownTime()
     },
@@ -197,7 +205,7 @@ export default {
                 confirmButtonText: 'ตกลง',
                 showLoaderOnConfirm: true,
                 preConfirm: (id) => {
-                    return fetch(`${HTTP_HOST}/hint/${id}`)
+                    return fetch(`${HTTP_HOST}/hint/${id}/${this.team}`)
                     .then(response => {
                         if (!response.ok) {
                             this.$swal({
