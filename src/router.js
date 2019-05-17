@@ -29,6 +29,11 @@ export default new Router({
       path: '/game',
       name: 'game',
       component: Game
+    },
+    {
+      path: '/scoreboard',
+      name: 'scoreboard',
+      component: () => import(/* webpackChunkName: "about" */ './views/Scoreboard.vue')
     }
   ]
 })

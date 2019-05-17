@@ -16,6 +16,7 @@
     font-weight: normal;
     font-style: normal;
 }
+
 body, html{
     font-family: 'db_admanrounded_x';
     background: $black;
@@ -118,5 +119,14 @@ body, html{
             font-size:1.5em;
             color: $green;
         }
+    }
+}
+.scoreboard{
+    padding: 20px;
+    .timer{
+        font-size: 10em;
+    }
+    .column{
+        font-size: 2em;
     }
 }
