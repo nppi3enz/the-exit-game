@@ -4,7 +4,7 @@
             {{ remainTime }}
         </div>
         <div>
-            <div class="columns">
+            <div class="columns is-mobile">
                 <div class="column">
                     Team A
                 </div>
@@ -14,8 +14,11 @@
                 <div class="column">
                     <font-awesome-icon icon="lightbulb" size="1x" /> {{totalHint[0].length}}
                 </div>
+                <div class="column">
+                    {{resultLock(0)}}
+                </div>
             </div>
-            <div class="columns">
+            <div class="columns is-mobile">
                 <div class="column">
                     Team B
                 </div>
@@ -25,8 +28,11 @@
                 <div class="column">
                     <font-awesome-icon icon="lightbulb" size="1x" /> {{totalHint[1].length}}
                 </div>
+                <div class="column">
+                    {{resultLock(1)}}
+                </div>
             </div>
-            <div class="columns">
+            <div class="columns is-mobile">
                 <div class="column">
                     Team C
                 </div>
@@ -36,8 +42,11 @@
                 <div class="column">
                     <font-awesome-icon icon="lightbulb" size="1x" /> {{totalHint[2].length}}
                 </div>
+                <div class="column">
+                    {{resultLock(2)}}
+                </div>
             </div>
-            <div class="columns">
+            <div class="columns is-mobile">
                 <div class="column">
                     Team D
                 </div>
@@ -47,8 +56,11 @@
                 <div class="column">
                     <font-awesome-icon icon="lightbulb" size="1x" /> {{totalHint[3].length}}
                 </div>
+                <div class="column">
+                    {{resultLock(3)}}
+                </div>
             </div>
-            <div class="columns">
+            <div class="columns is-mobile">
                 <div class="column">
                     Team E
                 </div>
@@ -58,8 +70,11 @@
                 <div class="column">
                     <font-awesome-icon icon="lightbulb" size="1x" /> {{totalHint[4].length}}
                 </div>
+                <div class="column">
+                    {{resultLock(4)}}
+                </div>
             </div>
-            <div class="columns">
+            <div class="columns is-mobile">
                 <div class="column">
                     Team F
                 </div>
@@ -68,6 +83,9 @@
                 </div>
                 <div class="column">
                     <font-awesome-icon icon="lightbulb" size="1x" /> {{totalHint[5].length}}
+                </div>
+                <div class="column">
+                    {{resultLock(5)}}
                 </div>
             </div>
         </div>
@@ -91,6 +109,7 @@ export default {
             socket: io(HTTP_HOST),
             totalPenalty: [0,0,0,0,0,0],
             totalHint: [[], [], [], [], [], []],
+            totalLock: [false, false, false, false, false, false, false],
         }
     },
     mounted() {
@@ -130,6 +149,9 @@ export default {
         this.socket.on('ADMIN_HINT', (data) => {
             this.totalHint = data
         })
+        this.socket.on('ADMIN_COMPLETE', (data) => {
+            this.totalLock = data
+        })
 
     },
     methods: {
@@ -155,6 +177,13 @@ export default {
             var seconds = time - minutes * 60
             this.remainTime = pad(minutes)+":"+pad(seconds)
         },
+        resultLock(team){
+            if(!this.totalLock[team]) {
+                return 'Lock'
+            } else {
+                return 'UNLOCK!'
+            }
+        }
     }
 }
 </script>

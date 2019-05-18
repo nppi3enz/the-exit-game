@@ -29,7 +29,7 @@ app.use(bodyParser.urlencoded({ extended: true }))
 var sessionTeam = [];
 var totalPenalty = [0,0,0,0,0,0,0]
 var totalHint = [[],[],[],[],[],[],[]]
-
+var resultTeam = [false, false, false, false, false, false, false]
 // var date = new Date()
 
 // var setting_game = {
@@ -41,14 +41,30 @@ io.on('connection', function(socket) {
     socket.on('GAME', function() {
         io.emit('SETTING', setting_game)
     });
-    socket.on('SETTING', function() {
-        io.emit('getStatusGame', setting_game)
+    socket.on('SETTING', function(team) {
+        console.log(totalHint[team])
+        io.to(sessionTeam[team]).emit('getStatusGame', 
+        {
+            setting_game: setting_game,
+            hint: totalHint[team]
+        })
     });
     socket.on('LOGIN', function(result) {
         // io.emit('getStatusGame', setting_game)
         // console.log(result)
         sessionTeam[result.team] = result.clientId
     });
+    socket.on('PENALTY', function(result) {
+        console.log('PENALTY')
+        console.log(result)
+        totalPenalty[result] += 1
+        io.emit('ADMIN_PENALTY', totalPenalty)
+    });
+    socket.on('COMPLETE', function(team) {
+        resultTeam[team] = true
+        io.emit('ADMIN_COMPLETE', resultTeam)
+    });
+    
 });
 
 app.use(function(req, res, next) {
@@ -130,7 +146,7 @@ app.get('/hint/:id/:team', (req, res) => {
             totalHint[req.params.team].push(req.params.id)
         }
         //sendback
-        io.to(sessionTeam[req.params.team]).emit('updateHint', totalHint[req.params.team].length)
+        io.to(sessionTeam[req.params.team]).emit('updateHint', totalHint[req.params.team])
         io.emit('ADMIN_HINT', totalHint)
     } else {
         res.status(404).send('Not found');
@@ -144,6 +160,14 @@ app.get('/code/:id', (req, res) => {
     } else {
         res.status(404).send('Not found');
     }
+})
+app.get('/notice/:msg', (req, res) => {
+    io.emit('MSG', req.params.msg)
+    res.send('Complete');
+})
+app.get('/status/:msg', (req, res) => {
+    io.emit('STATUS', req.params.msg)
+    res.send('Complete');
 })
 // app.get('/machine/:id', (req, res) => {
     // const updateIndex = books.findIndex(book => book.id === req.params.id)

@@ -22,6 +22,12 @@ body, html{
     background: $black;
     color: $red;
 }
+.online{
+    color: $green;
+}
+.offline{
+    color: $red;
+}
 .timer{
     text-align: center;
     font-size: 8em;
@@ -50,6 +56,11 @@ body, html{
         }
         &.review{
             background: $grey;
+        }
+        &.white{
+            display: block;
+            // height:100%;
+            background:#fff;
         }
         &:disabled{
             color: #ccc;
@@ -127,6 +138,7 @@ body, html{
         font-size: 10em;
     }
     .column{
+        color: #fff;
         font-size: 2em;
     }
 }

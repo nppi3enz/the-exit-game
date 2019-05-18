@@ -1,13 +1,6 @@
 <template>
   <div>
     <div class="container">
-        <div class="columns is-mobile">
-            <div class="column">
-                Team: {{name_team[team]}}
-            </div>
-            <div class="column">Status: {{statusServer}}</div>
-            <div class="column">Hint: {{countHint}}</div>
-        </div>
         <div class="timer">
             {{remainTime}}
         </div>
@@ -34,28 +27,45 @@
                 Code</button>
         </div>
         <div class="columns is-mobile">
-            <button class="column review" :disabled="!statusGame">
+            <button class="column review" @click="reviewHint"  :disabled="!statusGame">
                 <font-awesome-icon icon="search" size="3x" /><br>
                 Review Hints</button>
+            <div class="column" style="color:#fff;background:rgba(0,0,0,0.8);">
+                Team: {{name_team[team]}}<br>
+                Status: <span :class="statusServer">{{statusServer}}</span><br>
+                Hint: {{hint.length}}
+                
+            </div>
            
             <button class="column machine" @click="callMachine" :disabled="!statusGame">
                 <font-awesome-icon icon="cog" size="3x"  /><br>
                 Machine</button>
         </div>
     </div>
+    
+    <div v-bind:class="{modal: true, 'is-active': show_hint }">
+        <div class="modal-background"></div>
+        <div class="modal-content" style="background: #fff;padding: 10px;text-align: center;">
+            <div style="font-size:1.5em;color:#888;padding: 10px;">เลือกหมายเลขที่ต้องการค่ะ</div>
+            <button class="button" v-for="hint_item in hint" v-on:click="callHintNum(hint_item)" >
+                {{ hint_item }}
+            </button>
+        </div>
+        <button @click="closeBtn" class="modal-close is-large" ></button>
+    </div>
     <div v-bind:class="{modal: true, 'is-active': game_puzzle }">
         <div class="modal-background"></div>
         <div class="modal-content">
             <puzzle></puzzle>
         </div>
-        <button  @click="closeBtn" class="modal-close is-large" aria-label="close"></button>
+        <button  @click="closeBtn" class="modal-close is-large" ></button>
     </div>
     <div v-bind:class="{modal: true, 'is-active': game_musicbox }">
         <div class="modal-background"></div>
         <div class="modal-content">
             <music-box></music-box>
         </div>
-        <button  @click="closeBtn" class="modal-close is-large" aria-label="close"></button>
+        <button  @click="closeBtn" class="modal-close is-large" ></button>
     </div>
   </div>
 </template>
@@ -85,11 +95,12 @@ export default {
             interval: null,
             game_puzzle: false,
             game_musicbox: false,
+            show_hint: false,
             numPenalty: 0,
             timePenalty: 0,
             checkFlagPenalty: false,
             name_team: ['A','B','C','D','E','F'],
-            countHint: 0,
+            hint: []
         }
     },
     mounted() {
@@ -100,10 +111,11 @@ export default {
             this.$router.push('/') 
         }
         this.team = localStorage.getItem('login')
-        // this.timePenalty
+        
         this.socket.on('getStatusGame', (data) => {
-            this.statusGame = data.gameStart
-            this.timeFinish = data.timeFinish
+            this.statusGame = data.setting_game.gameStart
+            this.timeFinish = data.setting_game.timeFinish
+            this.hint = (data.hint != undefined) ? data.hint : []
         });
         this.socket.on('connect', () => {
             if(this.socket.connected){
@@ -137,7 +149,15 @@ export default {
             }
         });
         this.socket.on('updateHint', (data) => {
-            this.countHint = data
+            this.hint = data
+        })
+        this.socket.on('MSG', (data) => {
+            this.$swal({
+                title: data
+            })
+        })
+        this.socket.on('STATUS', (data) => {
+            this.message = data
         })
         
         this.countdownTime()
@@ -170,7 +190,7 @@ export default {
             },1000);
         },
         callInfoGame() {
-            this.socket.emit('SETTING');
+            this.socket.emit('SETTING', this.team);
         },
         calculateTime() {
             function pad(d) { return (d < 10) ? '0' + d.toString() : d.toString(); }
@@ -191,6 +211,19 @@ export default {
                 message: this.message
             });
             this.message = ''
+        },
+        reviewHint() {
+            this.show_hint = true
+        },
+        callHintNum(id) {
+            axios.get(`${HTTP_HOST}/hint/${id}/${this.team}`)
+            .then(result => {
+                this.show_hint = false
+                this.$swal({
+                    title: 'คำใบ้หมายเลข '+id,
+                    text: result.data.hint
+                })
+            })
         },
         callHint() {
             this.$swal({
@@ -274,6 +307,7 @@ export default {
                                 this.message = 'คุณถูกระงับไม่ให้ใส่รหัส 2 นาที'
                                 this.timePenalty = Math.floor(Date.now() / 1000) + 120
                                 localStorage.setItem("timePenalty", this.timePenalty);
+                                this.socket.emit('PENALTY', this.team)
                                 this.numPenalty = 0
                             }
                             throw new Error("testset")
@@ -284,6 +318,10 @@ export default {
                 },
                 allowOutsideClick: () => !this.$swal.isLoading()
                 }).then((result) => {
+                    if(result.value.id == '5130') {
+                        this.socket.emit('COMPLETE', this.team)
+                        clearInterval(this.interval)
+                    }
                     if (result.value.result) {
                         this.$swal({
                             title: result.value.result,
@@ -293,6 +331,8 @@ export default {
         },
         closeBtn() {
             this.game_puzzle = false
+            this.game_musicbox = false
+            this.show_hint = false
         }
     },
 
