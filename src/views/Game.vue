@@ -66,7 +66,7 @@
             <music-box></music-box>
         </div>
         <button  @click="closeBtn" class="modal-close is-large" ></button>
-    </div>
+    </div>x
   </div>
 </template>
 
@@ -170,6 +170,15 @@ export default {
                 })
                 .catch(error => {
                 console.log(error);
+            }).then(() => {
+                this.message = 'คุณถูกระงับไม่ให้ใส่รหัส 1 นาที'
+                this.timePenalty = Math.floor(Date.now() / 1000) + 60
+                localStorage.setItem("timePenalty", this.timePenalty);
+                this.socket.emit('PENALTY', this.team)
+                this.numPenalty = 0
+                this.$swal({
+                    text: 'คุณถูกลงโทษเพิ่ม 1 ครั้ง'
+                })
             })
         },
         checkPenalty() {
