@@ -1,7 +1,7 @@
 # the-exit-game
 [![Netlify Status](https://api.netlify.com/api/v1/badges/401734f0-6ce6-4146-b257-70e9791fddaa/deploy-status)](https://app.netlify.com/sites/theexitgame/deploys)
 
-Demo site : https://theexitgame.netlify.com(https://theexitgame.netlify.com/)
+Demo site : [https://theexitgame.netlify.com](https://theexitgame.netlify.com/)
 
 ## Project setup
 ```
