@@ -10,7 +10,7 @@
           </div>
           <p class="help">{{error}}</p>
         </div>
-        <button class="button is-primary is-large" type="button" @click="loginBtn">Submit</button>
+        <button class="button is-warning is-large" type="button" @click="loginBtn">Submit</button>
       </form>
     </div>
   </div>
@@ -23,7 +23,7 @@ const HTTP_HOST = process.env.VUE_APP_HTTP_HOST
 export default {
   data() {
       return {
-        error: '',
+        error: 'Type pass \'demo\' for testing gameplay',
         password: '',
         socket: io(HTTP_HOST),
       }
@@ -32,20 +32,23 @@ export default {
   // },
   methods: {
     loginBtn() {
-      if(this.password == 'aaa'){
+      if(this.password == 'demo'){
         this.gotoRoom(0)
-      } else if(this.password == 'bbb'){
+      } else if(this.password == 'aaa'){
         this.gotoRoom(1)
-      } else if(this.password == 'ccc'){
+      } else if(this.password == 'bbb'){
         this.gotoRoom(2)
-      } else if(this.password == 'ddd'){
+      } else if(this.password == 'ccc'){
         this.gotoRoom(3)
-      } else if(this.password == 'eee'){
+      } else if(this.password == 'ddd'){
         this.gotoRoom(4)
-      } else if(this.password == 'fff'){
+      } else if(this.password == 'eee'){
         this.gotoRoom(5)
-      }
+      } else if(this.password == 'fff'){
+        this.gotoRoom(6)
+      } else {
       this.error = 'รหัสผ่านไม่ถูกต้อง'
+      }
     },
     gotoRoom(n){
       localStorage.setItem('login', n)

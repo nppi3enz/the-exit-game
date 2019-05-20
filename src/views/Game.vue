@@ -66,7 +66,7 @@
             <music-box></music-box>
         </div>
         <button  @click="closeBtn" class="modal-close is-large" ></button>
-    </div>x
+    </div>
   </div>
 </template>
 
@@ -99,7 +99,7 @@ export default {
             numPenalty: 0,
             timePenalty: 0,
             checkFlagPenalty: false,
-            name_team: ['A','B','C','D','E','F'],
+            name_team: ['Demo','A','B','C','D','E','F'],
             hint: []
         }
     },

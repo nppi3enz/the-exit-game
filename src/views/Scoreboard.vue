@@ -9,20 +9,6 @@
                     Team A
                 </div>
                 <div class="column">
-                    <font-awesome-icon icon="skull-crossbones" size="1x" /> {{totalPenalty[0]}}
-                </div>
-                <div class="column">
-                    <font-awesome-icon icon="lightbulb" size="1x" /> {{totalHint[0].length}}
-                </div>
-                <div class="column">
-                    {{resultLock(0)}}
-                </div>
-            </div>
-            <div class="columns is-mobile">
-                <div class="column">
-                    Team B
-                </div>
-                <div class="column">
                     <font-awesome-icon icon="skull-crossbones" size="1x" /> {{totalPenalty[1]}}
                 </div>
                 <div class="column">
@@ -34,7 +20,7 @@
             </div>
             <div class="columns is-mobile">
                 <div class="column">
-                    Team C
+                    Team B
                 </div>
                 <div class="column">
                     <font-awesome-icon icon="skull-crossbones" size="1x" /> {{totalPenalty[2]}}
@@ -48,7 +34,7 @@
             </div>
             <div class="columns is-mobile">
                 <div class="column">
-                    Team D
+                    Team C
                 </div>
                 <div class="column">
                     <font-awesome-icon icon="skull-crossbones" size="1x" /> {{totalPenalty[3]}}
@@ -62,7 +48,7 @@
             </div>
             <div class="columns is-mobile">
                 <div class="column">
-                    Team E
+                    Team D
                 </div>
                 <div class="column">
                     <font-awesome-icon icon="skull-crossbones" size="1x" /> {{totalPenalty[4]}}
@@ -76,7 +62,7 @@
             </div>
             <div class="columns is-mobile">
                 <div class="column">
-                    Team F
+                    Team E
                 </div>
                 <div class="column">
                     <font-awesome-icon icon="skull-crossbones" size="1x" /> {{totalPenalty[5]}}
@@ -86,6 +72,20 @@
                 </div>
                 <div class="column">
                     {{resultLock(5)}}
+                </div>
+            </div>
+            <div class="columns is-mobile">
+                <div class="column">
+                    Team F
+                </div>
+                <div class="column">
+                    <font-awesome-icon icon="skull-crossbones" size="1x" /> {{totalPenalty[6]}}
+                </div>
+                <div class="column">
+                    <font-awesome-icon icon="lightbulb" size="1x" /> {{totalHint[6].length}}
+                </div>
+                <div class="column">
+                    {{resultLock(6)}}
                 </div>
             </div>
         </div>
