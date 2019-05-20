@@ -1,12 +1,12 @@
 <template>
   <div>
     <div class="container">
-        <div class="timer">
+        <div :class="classTimer">
             {{remainTime}}
         </div>
         <div class="columns">
             <div class="column is-full">
-                <div class="has-text-danger has-text-centered">
+                <div class="has-text-centered">
                     {{message}}
                 </div>
             </div>
@@ -84,6 +84,7 @@ export default {
     components: { puzzle, musicBox },    
     data() {
         return {
+            classTimer: ['timer'],
             statusServer: 'wait..',
             statusGame: false,
             timeStart: null,
@@ -208,12 +209,23 @@ export default {
             function pad(d) { return (d < 10) ? '0' + d.toString() : d.toString(); }
             // var date = Math.floor(Date.now() / 1000)
             this.timeStart = Math.floor(Date.now() / 1000)
-            var time = parseInt(this.timeFinish)-parseInt(this.timeStart)
-            
+            var time = Math.abs(parseInt(this.timeFinish)-parseInt(this.timeStart))
+                        
             var minutes = Math.floor(time / 60)
             var seconds = time - minutes * 60
             this.remainTime = pad(minutes)+":"+pad(seconds)
             this.checkPenalty()
+            if(minutes == 0 && seconds == 0) {
+                this.$swal({
+                    title: 'หมดเวลาแล้ว ภารกิจล้มเหลว'
+                })
+            }
+            if( (minutes > 10) && (this.timeFinish > this.timeStart) ){
+                this.classTimer = ['timer']
+            } else {
+                this.classTimer = ['timer', 'is-danger']
+            }
+            
         },
         sendMessage(e) {
             e.preventDefault();

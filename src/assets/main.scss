@@ -20,7 +20,7 @@
 body, html{
     font-family: 'db_admanrounded_x';
     background: $black;
-    color: $red;
+    color: #fff;
 }
 .online{
     color: $green;
@@ -31,6 +31,9 @@ body, html{
 .timer{
     text-align: center;
     font-size: 8em;
+    &.is-danger{
+        color: red;
+    }
 }
 .menu{
     position: fixed;
