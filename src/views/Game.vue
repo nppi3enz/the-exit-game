@@ -111,11 +111,14 @@ export default {
             this.$router.push('/') 
         }
         this.team = localStorage.getItem('login')
-        
-        this.socket.on('getStatusGame', (data) => {
+        this.socket.on('getSettingGame', (data) => {
             this.statusGame = data.setting_game.gameStart
             this.timeFinish = data.setting_game.timeFinish
             this.hint = (data.hint != undefined) ? data.hint : []
+        });
+        this.socket.on('getStatusGame', (data) => {
+            this.statusGame = data.gameStart
+            this.timeFinish = data.timeFinish
         });
         this.socket.on('connect', () => {
             if(this.socket.connected){

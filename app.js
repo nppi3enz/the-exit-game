@@ -42,8 +42,7 @@ io.on('connection', function(socket) {
         io.emit('SETTING', setting_game)
     });
     socket.on('SETTING', function(team) {
-        console.log(totalHint[team])
-        io.to(sessionTeam[team]).emit('getStatusGame', 
+        io.to(sessionTeam[team]).emit('getSettingGame', 
         {
             setting_game: setting_game,
             hint: totalHint[team]
@@ -129,7 +128,11 @@ app.get('/resume/:time', (req, res) => {
     res.send('Resumed')
 })
 app.get('/reset', (req, res) => {
-    setting_game['gameStart'] = false
+    setting_game = {
+        'gameStart': false,
+        'timeStart': 0,
+        'timeFinish': 0
+    }
     io.emit('getStatusGame', setting_game)
     io.emit('GAME', 'reset')
     res.send('Reseted')
