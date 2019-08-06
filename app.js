@@ -89,8 +89,11 @@ app.get('/start', (req, res) => {
     var date = new Date()
     var timeFinish = date.getTime()/1000
 
-    setting_game['gameStart'] = true
-    setting_game['timeFinish'] = Math.floor(timeFinish+LIMIT_TIME)
+    setting_game = {
+        'gameStart' : true,
+        'timeStart' : Math.floor(date.getTime()/1000),
+        'timeFinish' : Math.floor(timeFinish+LIMIT_TIME)
+    }
     
     io.emit('GAME', 'start')
     io.emit('getStatusGame', setting_game)
@@ -120,12 +123,17 @@ app.get('/resume', (req, res) => {
     res.send('Resumed')
 })
 app.get('/resume/:time', (req, res) => {
+    var date = new Date()
+    var timeStart = Math.floor(date.getTime()/1000)
+
     setting_game['gameStart'] = true
-    setting_game['timeFinish'] = req.params.time
+    setting_game['timeStart'] = timeStart
+    setting_game['timeFinish'] = timeStart+parseInt(req.params.time)
     
     io.emit('getStatusGame', setting_game)
     io.emit('GAME', 'resume')
-    res.send('Resumed')
+    // res.send('Resumed')
+    res.send(setting_game)
 })
 app.get('/reset', (req, res) => {
     setting_game = {
@@ -140,7 +148,9 @@ app.get('/reset', (req, res) => {
 app.get('/admin', (req, res) => {
     res.send('Admin')
 })
-
+app.get('/refresh', (req, res) => {
+    res.send(setting_game)
+})
 app.get('/hint/:id/:team', (req, res) => {
     var obj = hints.find(hint => hint.id === req.params.id)
     if(obj !== undefined) {

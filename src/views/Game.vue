@@ -24,7 +24,7 @@
                 <!-- !statusGame &&  -->
             <button class="column code" @click="callCode" :disabled="!statusGame || checkFlagPenalty">
                 <font-awesome-icon icon="lock" size="3x" /><br>
-                Code</button>
+                Code {{countTimePenalty}}</button>
         </div>
         <div class="columns is-mobile">
             <button class="column review" @click="reviewHint"  :disabled="!statusGame">
@@ -91,7 +91,7 @@ export default {
             timeFinish: null,
             remainTime: 'wait',
             team: '',
-            message: 'ขอให้โชคดี :)',
+            message: 'รอสัญญาณเริ่มเกม ... ขอให้โชคดี :)',
             socket: io(HTTP_HOST),
             interval: null,
             game_puzzle: false,
@@ -99,6 +99,7 @@ export default {
             show_hint: false,
             numPenalty: 0,
             timePenalty: 0,
+            countTimePenalty: '',
             checkFlagPenalty: false,
             name_team: ['Demo','A','B','C','D','E','F'],
             hint: []
@@ -116,9 +117,13 @@ export default {
             this.statusGame = data.setting_game.gameStart
             this.timeFinish = data.setting_game.timeFinish
             this.hint = (data.hint != undefined) ? data.hint : []
+            if(this.statusGame == true) {
+                this.message = 'เริ่มเกมได้'
+            }
         });
         this.socket.on('getStatusGame', (data) => {
             this.statusGame = data.gameStart
+            this.timeStart = data.timeStart
             this.timeFinish = data.timeFinish
         });
         this.socket.on('connect', () => {
@@ -142,13 +147,16 @@ export default {
         });
         this.socket.on('GAME', (data) => {
             if(data == 'pause') {
+                this.message = 'หยุดเวลาชั่วคราว'
                 clearInterval(this.interval)
             } else if(data == 'resume'){
+                this.message = 'เริ่มเกมได้'
                 this.countdownTime()
             } else if(data == 'reset'){
                 clearInterval(this.interval)
                 this.remainTime = '60:00'
             } else if(data == 'start'){
+                this.message = 'เริ่มเกมได้'
                 this.countdownTime()
             }
         });
@@ -157,7 +165,7 @@ export default {
         })
         this.socket.on('MSG', (data) => {
             this.$swal({
-                title: data
+                html:'<span style="color:#aaa;">ข้อความจากพระเจ้า</span><br><span style="font-size:2em;">'+data+'</span>'
             })
         })
         this.socket.on('STATUS', (data) => {
@@ -175,7 +183,7 @@ export default {
                 .catch(error => {
                 console.log(error);
             }).then(() => {
-                this.message = 'คุณถูกระงับไม่ให้ใส่รหัส 1 นาที'
+                // this.message = 'คุณถูกระงับไม่ให้ใส่รหัส 1 นาที'
                 this.timePenalty = Math.floor(Date.now() / 1000) + 60
                 localStorage.setItem("timePenalty", this.timePenalty);
                 this.socket.emit('PENALTY', this.team)
@@ -187,9 +195,12 @@ export default {
         },
         checkPenalty() {
             if(this.timePenalty > Math.floor(Date.now() / 1000)) {
+                this.countTimePenalty = "("+(this.timePenalty-Math.floor(Date.now() / 1000))+")"
                 this.checkFlagPenalty = true
                 return true
             }
+            this.countTimePenalty = ''
+            // this.message = 'เริ่มเกมได้'
             this.checkFlagPenalty = false
             return false
         },
@@ -308,6 +319,7 @@ export default {
                 })
         },
         callCode() {
+            var parent = this
             this.$swal({
                 title: 'Code',
                 text: 'กรุณาใส่รหัสผ่าน 4 ตัว',
@@ -344,7 +356,7 @@ export default {
                 }).then((result) => {
                     if(result.value.id == '5130') {
                         this.socket.emit('COMPLETE', this.team)
-                        clearInterval(this.interval)
+                        clearInterval(parent.interval)
                     }
                     if (result.value.result) {
                         this.$swal({

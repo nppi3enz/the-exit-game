@@ -52,7 +52,7 @@ export default {
     },
     gotoRoom(n){
       localStorage.setItem('login', n)
-      this.$router.push('Game') 
+      this.$router.push('game') 
     }
   }
 
