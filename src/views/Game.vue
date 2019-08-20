@@ -1,12 +1,25 @@
 <template>
   <div>
+    <div class="header">
+        <div class="columns is-mobile">
+            <div class="column">
+                Team: {{name_team}}
+            </div>
+            <div class="column has-text-centered">
+                <span :class="statusServer">{{statusServer}}</span>
+            </div>
+            <div class="column has-text-right">
+                Hint: {{hint.length}}
+            </div>
+        </div>
+    </div>
     <div class="container">
         <div :class="classTimer">
             {{remainTime}}
         </div>
         <div class="columns">
             <div class="column is-full">
-                <div class="has-text-centered">
+                <div class="has-text-centered message-box">
                     {{message}}
                 </div>
             </div>
@@ -15,31 +28,27 @@
     <div class="menu">
         <div class="columns is-mobile">
             <button class="column hint" @click="callHint" :disabled="!statusGame">
-                <font-awesome-icon icon="lightbulb" size="3x" /><br>
-                Hint</button>
+                <font-awesome-icon icon="lightbulb" size="2x" />
+                <div class="title-btn">Hint</div></button>
             <button class="column penalty" @click="callPenalty" :disabled="!statusGame">
-                <font-awesome-icon icon="skull-crossbones" size="3x" /><br>
-                Penalty
+                <font-awesome-icon icon="skull-crossbones" size="2x" />
+                <div class="title-btn">Penalty</div>
                 </button>
                 <!-- !statusGame &&  -->
             <button class="column code" @click="callCode" :disabled="!statusGame || checkFlagPenalty">
-                <font-awesome-icon icon="lock" size="3x" /><br>
-                Code {{countTimePenalty}}</button>
+                <font-awesome-icon icon="lock" size="2x" />
+                <div class="title-btn">Code {{countTimePenalty}}</div></button>
         </div>
         <div class="columns is-mobile">
             <button class="column review" @click="reviewHint"  :disabled="!statusGame">
-                <font-awesome-icon icon="search" size="3x" /><br>
-                Review Hints</button>
-            <div class="column" style="color:#fff;background:rgba(0,0,0,0.8);">
-                Team: {{name_team}}<br>
-                Status: <span :class="statusServer">{{statusServer}}</span><br>
-                Hint: {{hint.length}}
-                
-            </div>
-           
+                <font-awesome-icon icon="search" size="2x" /><br>
+                <div class="title-btn">Review Hints</div></button>
+            <button class="column help-staff" @click="callHelp"  :disabled="!statusGame">
+                <font-awesome-icon icon="question" size="2x" /><br>
+                <div class="title-btn">Help</div></button>
             <button class="column machine" @click="callMachine" :disabled="!statusGame">
-                <font-awesome-icon icon="cog" size="3x"  /><br>
-                Machine</button>
+                <font-awesome-icon icon="cog" size="2x"  /><br>
+                <div class="title-btn">Machine</div></button>
         </div>
     </div>
     
@@ -178,6 +187,12 @@ export default {
         this.countdownTime()
     },
     methods: {
+        callHelp() {
+            this.$swal({
+                title: 'ขณะนี้ได้เรียกทีมงานแล้ว',
+                text: 'รอแปปนึงนะ :)'
+            })
+        },
         callPenalty() {
             axios.get(HTTP_HOST+'/penalty/'+this.team)
                 .then(response => {

@@ -2,25 +2,38 @@
 @import "~bulma/bulma";
 
 @font-face {
-    font-family: 'db_admanrounded_x';
-    src: url('fonts/db_admanrounded_x_bd_v3.2-webfont.woff2') format('woff2'),
-         url('fonts/db_admanrounded_x_bd_v3.2-webfont.woff') format('woff');
-    font-weight: bold;
+    font-family: 'fc_activeregular';
+    src: url('fonts/fc_active_regular-webfont.woff2') format('woff2'),
+         url('fonts/fc_active_regular-webfont.woff') format('woff');
+    font-weight: normal;
     font-style: normal;
-
 }
+
 @font-face {
-    font-family: 'db_admanrounded_x';
-    src: url('fonts/db_admanrounded_x_v3.2-webfont.woff2') format('woff2'),
-         url('fonts/db_admanrounded_x_v3.2-webfont.woff') format('woff');
+    font-family: 'fc_activeregular';
+    src: url('fonts/fc_active_regular-webfont.woff2') format('woff2'),
+         url('fonts/fc_active_regular-webfont.woff') format('woff');
     font-weight: normal;
     font-style: normal;
 }
 
 body, html{
-    font-family: 'db_admanrounded_x';
+    font-family: 'fc_activeregular';
     background: $black;
     color: #fff;
+    font-size:20px;
+}
+.header{
+    .columns{
+        padding:10px;
+        .column{
+            font-size: 1.5em;
+        }
+    }
+}
+.message-box{
+    margin-top: -10px;
+    font-size:1.5em;
 }
 .online{
     color: $green;
@@ -30,7 +43,7 @@ body, html{
 }
 .timer{
     text-align: center;
-    font-size: 8em;
+    font-size: 7em;
     &.is-danger{
         color: red;
     }
@@ -42,29 +55,43 @@ body, html{
     width: 100%;
     // color: white;
     text-align: center;
+    padding:10px 20px;
     button{
+        margin: 6px;
         border:0px;
         color: #fff;
-        &.penalty{
-            background: $red;
+        background: #000;
+        border:2px solid #fff;
+        line-height: 1.5em;
+        .title-btn{
+            padding: 0px;
+            height: 25px;
+            margin-top: -10px;
+            font-size: 25px;
         }
-        &.machine{
-            background: $green;
-        }
-        &.code{
-            background: $yellow;
-        }
-        &.hint{
-            background: $blue;
-        }
-        &.review{
-            background: $grey;
-        }
-        &.white{
-            display: block;
-            // height:100%;
-            background:#fff;
-        }
+        // &.penalty{
+        //     background: $red;
+        // }
+        // &.machine{
+        //     background: $green;
+        // }
+        // &.code{
+        //     background: $yellow;
+        // }
+        // &.hint{
+        //     background: $blue;
+        // }
+        // &.review{
+        //     background: $grey;
+        // }
+        // &.help-staff{
+        //     background: #ccc;
+        // }
+        // &.white{
+        //     display: block;
+        //     // height:100%;
+        //     background:#fff;
+        // }
         &:disabled{
             color: #ccc;
             opacity: 0.5;
@@ -72,7 +99,7 @@ body, html{
     }
 }
 .menu button{
-    font-family: 'db_admanrounded_x';
+    font-family: 'fc_activeregular';
     font-size: 1.5rem;
     clear:both;
     svg{
@@ -80,7 +107,7 @@ body, html{
     }
 }
 .swal2-styled {
-    font-family: 'db_admanrounded_x';
+    font-family: 'fc_activeregular';
 }
 .puzzle{
     background: white;
