@@ -27,28 +27,40 @@
     </div>
     <div class="menu">
         <div class="columns is-mobile">
-            <button class="column hint" @click="callHint" :disabled="!statusGame">
-                <font-awesome-icon icon="lightbulb" size="2x" />
-                <div class="title-btn">Hint</div></button>
-            <button class="column penalty" @click="callPenalty" :disabled="!statusGame">
+            <div class="outer column">
+                <button class="hint" @click="callHint" :disabled="!statusGame">
+                    <font-awesome-icon icon="lightbulb" size="2x" />
+                    <div class="title-btn">Hint</div></button>
+            </div>
+            <div class="outer column ">
+            <button class="penalty" @click="callPenalty" :disabled="!statusGame">
                 <font-awesome-icon icon="skull-crossbones" size="2x" />
                 <div class="title-btn">Penalty</div>
                 </button>
                 <!-- !statusGame &&  -->
-            <button class="column code" @click="callCode" :disabled="!statusGame || checkFlagPenalty">
-                <font-awesome-icon icon="lock" size="2x" />
-                <div class="title-btn">Code {{countTimePenalty}}</div></button>
+            </div>
+            <div class="outer column">
+                <button class="code" @click="callCode" :disabled="!statusGame || checkFlagPenalty">
+                    <font-awesome-icon icon="lock" size="2x" />
+                    <div class="title-btn">Code {{countTimePenalty}}</div></button>
+            </div>
         </div>
         <div class="columns is-mobile">
-            <button class="column review" @click="reviewHint"  :disabled="!statusGame">
-                <font-awesome-icon icon="search" size="2x" /><br>
-                <div class="title-btn">Review Hints</div></button>
-            <button class="column help-staff" @click="callHelp"  :disabled="!statusGame">
-                <font-awesome-icon icon="question" size="2x" /><br>
-                <div class="title-btn">Help</div></button>
-            <button class="column machine" @click="callMachine" :disabled="!statusGame">
-                <font-awesome-icon icon="cog" size="2x"  /><br>
-                <div class="title-btn">Machine</div></button>
+            <div class="outer column ">
+                <button class="review" @click="reviewHint"  :disabled="!statusGame">
+                    <font-awesome-icon icon="search" size="2x" /><br>
+                    <div class="title-btn">Review Hints</div></button>
+            </div>
+            <div class="outer column ">
+                <button class="help-staff" @click="callHelp"  :disabled="!statusGame">
+                    <font-awesome-icon icon="question" size="2x" /><br>
+                    <div class="title-btn">Help</div></button>
+            </div>
+            <div class="outer column ">
+                <button class="machine" @click="callMachine" :disabled="!statusGame">
+                    <font-awesome-icon icon="cog" size="2x"  /><br>
+                    <div class="title-btn">Machine</div></button>
+            </div>
         </div>
     </div>
     

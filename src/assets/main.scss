@@ -51,50 +51,55 @@ body, html{
 .menu{
     position: fixed;
     left: 0;
-    bottom: 20px;
+    bottom: 25px;
     width: 100%;
     // color: white;
     text-align: center;
     padding:10px 30px;
-    button{
-        // margin: 6px;
-        border:0px;
-        color: #fff;
-        background: #000;
-        border:2px solid #fff;
-        line-height: 1.5em;
-        .title-btn{
-            padding: 0px;
-            height: 25px;
-            margin-top: -10px;
-            font-size: 20px;
-        }
-        // &.penalty{
-        //     background: $red;
-        // }
-        // &.machine{
-        //     background: $green;
-        // }
-        // &.code{
-        //     background: $yellow;
-        // }
-        // &.hint{
-        //     background: $blue;
-        // }
-        // &.review{
-        //     background: $grey;
-        // }
-        // &.help-staff{
-        //     background: #ccc;
-        // }
-        // &.white{
-        //     display: block;
-        //     // height:100%;
-        //     background:#fff;
-        // }
-        &:disabled{
-            color: #ccc;
-            opacity: 0.5;
+    .outer{
+        padding:5px;
+        button{
+            // margin: 6px;
+            width:100%;
+            padding:10px;
+            border:0px;
+            color: #fff;
+            background: #000;
+            border:2px solid #fff;
+            line-height: 1.5em;
+            .title-btn{
+                padding: 0px;
+                height: 25px;
+                margin-top: -10px;
+                font-size: 20px;
+            }
+            // &.penalty{
+            //     background: $red;
+            // }
+            // &.machine{
+            //     background: $green;
+            // }
+            // &.code{
+            //     background: $yellow;
+            // }
+            // &.hint{
+            //     background: $blue;
+            // }
+            // &.review{
+            //     background: $grey;
+            // }
+            // &.help-staff{
+            //     background: #ccc;
+            // }
+            // &.white{
+            //     display: block;
+            //     // height:100%;
+            //     background:#fff;
+            // }
+            &:disabled{
+                color: #ccc;
+                opacity: 0.5;
+            }
         }
     }
 }
