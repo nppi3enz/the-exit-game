@@ -1,0 +1,57 @@
+[
+    {
+        "user": "demo",
+        "team": "Demo",
+        "active": false
+    },
+    {
+        "user": "aaa",
+        "team": "A",
+        "active": true
+    },
+    {
+        "user": "bbb",
+        "team": "B",
+        "active": true
+    },
+    {
+        "user": "ccc",
+        "team": "C",
+        "active": true
+    },
+    {
+        "user": "ddd",
+        "team": "D",
+        "active": true
+    },
+    {
+        "user": "eee",
+        "team": "E",
+        "active": true
+    },
+    {
+        "user": "fff",
+        "team": "F",
+        "active": true
+    },
+    {
+        "user": "ggg",
+        "team": "G",
+        "active": true
+    },
+    {
+        "user": "hhh",
+        "team": "H",
+        "active": true
+    },
+    {
+        "user": "iii",
+        "team": "I",
+        "active": true
+    },
+    {
+        "user": "jjj",
+        "team": "J",
+        "active": true
+    }
+]

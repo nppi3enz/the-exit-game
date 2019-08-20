@@ -31,7 +31,7 @@
                 <font-awesome-icon icon="search" size="3x" /><br>
                 Review Hints</button>
             <div class="column" style="color:#fff;background:rgba(0,0,0,0.8);">
-                Team: {{name_team[team]}}<br>
+                Team: {{name_team}}<br>
                 Status: <span :class="statusServer">{{statusServer}}</span><br>
                 Hint: {{hint.length}}
                 
@@ -73,6 +73,7 @@
 <script>
 import io from 'socket.io-client'
 import axios from 'axios'
+import userRoom from '../../db/user.json'
 
 // import keyboard from 'vue-keyboard'
 import puzzle from './Puzzle'
@@ -101,7 +102,7 @@ export default {
             timePenalty: 0,
             countTimePenalty: '',
             checkFlagPenalty: false,
-            name_team: ['Demo','A','B','C','D','E','F'],
+            name_team: '',
             hint: []
         }
     },
@@ -113,6 +114,8 @@ export default {
             this.$router.push('/') 
         }
         this.team = localStorage.getItem('login')
+        this.name_team = userRoom[this.team].team
+        
         this.socket.on('getSettingGame', (data) => {
             this.statusGame = data.setting_game.gameStart
             this.timeFinish = data.setting_game.timeFinish
