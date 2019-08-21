@@ -1,5 +1,20 @@
 // $primary: blue;
+$progress-bar-background-color: #1d2a2b !default;
+$progress-value-background-color: #56dfbf !default;
+$progress-border-radius: 0px !default;
+$progress-indeterminate-duration: 1.5s !default;
+
 @import "~bulma/bulma";
+// Import only what you need from Bulma
+// @import "~bulma/sass/utilities/_all.sass";
+// @import "~bulma/sass/base/_all.sass";
+// @import "~bulma/sass/elements/button.sass";
+// @import "~bulma/sass/elements/container.sass";
+// @import "~bulma/sass/elements/title.sass";
+// @import "~bulma/sass/form/_all.sass";
+// @import "~bulma/sass/components/navbar.sass";
+// @import "~bulma/sass/layout/hero.sass";
+// @import "~bulma/sass/layout/section.sass";
 
 @font-face {
     font-family: 'fc_activeregular';
@@ -208,4 +223,14 @@ body, html{
         border:2px solid #6f7887 !important;
     }
 
+}
+.progress-box{
+    width: 70%;
+    margin:0 auto;
+    margin-top:-40px;
+    margin-bottom: 40px;
+    .progress{
+        border-radius: 0px;
+        border:1px solid rgba(255,255,255,0.5);
+    }
 }

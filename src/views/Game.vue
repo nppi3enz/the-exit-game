@@ -17,6 +17,9 @@
         <div :class="classTimer">
             {{remainTime}}
         </div>
+        <div class="progress-box">
+            <progress :class="progress_bar.class" :value="progress_bar.value" max="100"></progress>
+        </div>
         <div class="columns">
             <div class="column is-full">
                 <div class="has-text-centered message-box">
@@ -124,7 +127,11 @@ export default {
             countTimePenalty: '',
             checkFlagPenalty: false,
             name_team: '',
-            hint: []
+            hint: [],
+            progress_bar: {
+                value: null,
+                class: ['progress', 'is-small', 'is-theme']
+            }
         }
     },
     mounted() {
@@ -251,7 +258,7 @@ export default {
             // var date = Math.floor(Date.now() / 1000)
             this.timeStart = Math.floor(Date.now() / 1000)
             var time = Math.abs(parseInt(this.timeFinish)-parseInt(this.timeStart))
-                        
+            this.progress_bar.value = Math.floor(100*time/3600)
             var minutes = Math.floor(time / 60)
             var seconds = time - minutes * 60
             this.remainTime = pad(minutes)+":"+pad(seconds)
@@ -263,8 +270,10 @@ export default {
             }
             if( (minutes > 10) && (this.timeFinish > this.timeStart) ){
                 this.classTimer = ['timer']
+                this.progress_bar.class = ['progress', 'is-small', 'is-theme']
             } else {
                 this.classTimer = ['timer', 'is-danger']
+                this.progress_bar.class = ['progress', 'is-small', 'is-danger']
             }
             
         },
