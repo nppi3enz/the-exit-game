@@ -187,14 +187,27 @@ body, html{
         }
     }
 }
-.scoreboard{
+#scoreboard{
     padding: 20px;
     .timer{
-        font-size: 10em;
+        .inner-time{
+            margin-top: -60px;
+            font-size: 6rem;
+        }
     }
-    .column{
-        color: #fff;
-        font-size: 2em;
+    .teams{
+        .title-team{
+            font-size: 2em;
+        }
+        .icon{
+            font-size: 1.5rem;
+            margin-top: -10px;
+        }
+        .columns.score{
+            .column{
+                font-size: 1.2rem;
+            }
+        }
     }
 }
 .swal2-modal{

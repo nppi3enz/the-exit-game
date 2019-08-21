@@ -7,6 +7,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { fas } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import VueSweetalert2 from 'vue-sweetalert2';
+import VueCircle from 'vue2-circle-progress'
 
 library.add(fas)
 

@@ -61,7 +61,7 @@ io.on('connection', function(socket) {
     });
     socket.on('COMPLETE', function(team) {
         resultTeam[team] = true
-        io.emit('ADMIN_COMPLETE', resultTeam)
+        io.emit('ADMIN_COMPLETE', {last: team, data: resultTeam})
     });
     
 });

@@ -1,93 +1,63 @@
 <template>
-    <div class="scoreboard">
-        <div class="timer">
-            {{ remainTime }}
+    <div id="scoreboard">
+        <div :class="classTimer">
+            <vue-circle
+                ref="myUniqueID"
+                :progress="100"
+                :size="300"
+                :reverse="true"
+                line-cap="square"
+                :fill="fill"
+                empty-fill="rgba(0, 0, 0, .1)"
+                :animation-start-value="0.0"
+                :start-angle="4.7"
+                insert-mode="append"
+                :thickness="10"
+                :show-percent="false"
+                @vue-circle-progress="progress"
+                @vue-circle-end="progress_end">
+                <div class="inner-time">{{ remainTime }}</div>
+            </vue-circle>
         </div>
-        <div>
-            <div class="columns is-mobile">
-                <div class="column">
-                    Team A
+        <div class="container teams">
+            <div class="columns is-multiline is-centered is-mobile">
+                <div v-for="item in passRoom" class="column is-one-quarter has-text-centered">
+                    <div class="title-team">
+                        Team {{item.team}}
+                    </div>
+                    <vue-circle
+                        ref="objCircle"
+                        :progress="100"
+                        :size="150"
+                        :reverse="true"
+                        line-cap="square"
+                        :fill="fillteam"
+                        empty-fill="rgba(0, 0, 0, .1)"
+                        :animation-start-value="0.0"
+                        :start-angle="4.7"
+                        insert-mode="append"
+                        :thickness="10"
+                        :show-percent="false"
+                        @vue-circle-progress="progress"
+                        @vue-circle-end="progress_end">
+                        <div class="icon">
+                            <font-awesome-icon :icon="resultLock(item.id)" size="2x"  />
+                            <!-- {{resultLock(1)}} -->
+                        </div>
+                    </vue-circle>
+                    <div class="columns score">
+                        <div class="column">
+                            <font-awesome-icon icon="skull-crossbones" size="1x" /> {{totalPenalty[item.id]}}
+                        </div>
+                        <div class="column">
+                            <font-awesome-icon icon="lightbulb" size="1x" /> 
+                            {{totalHint[item.id].length}}
+                            <!-- {{totalHint[0].length}} -->
+                        </div>
+                    </div>
                 </div>
-                <div class="column">
-                    <font-awesome-icon icon="skull-crossbones" size="1x" /> {{totalPenalty[1]}}
+                
                 </div>
-                <div class="column">
-                    <font-awesome-icon icon="lightbulb" size="1x" /> {{totalHint[1].length}}
-                </div>
-                <div class="column">
-                    {{resultLock(1)}}
-                </div>
-            </div>
-            <div class="columns is-mobile">
-                <div class="column">
-                    Team B
-                </div>
-                <div class="column">
-                    <font-awesome-icon icon="skull-crossbones" size="1x" /> {{totalPenalty[2]}}
-                </div>
-                <div class="column">
-                    <font-awesome-icon icon="lightbulb" size="1x" /> {{totalHint[2].length}}
-                </div>
-                <div class="column">
-                    {{resultLock(2)}}
-                </div>
-            </div>
-            <div class="columns is-mobile">
-                <div class="column">
-                    Team C
-                </div>
-                <div class="column">
-                    <font-awesome-icon icon="skull-crossbones" size="1x" /> {{totalPenalty[3]}}
-                </div>
-                <div class="column">
-                    <font-awesome-icon icon="lightbulb" size="1x" /> {{totalHint[3].length}}
-                </div>
-                <div class="column">
-                    {{resultLock(3)}}
-                </div>
-            </div>
-            <div class="columns is-mobile">
-                <div class="column">
-                    Team D
-                </div>
-                <div class="column">
-                    <font-awesome-icon icon="skull-crossbones" size="1x" /> {{totalPenalty[4]}}
-                </div>
-                <div class="column">
-                    <font-awesome-icon icon="lightbulb" size="1x" /> {{totalHint[4].length}}
-                </div>
-                <div class="column">
-                    {{resultLock(4)}}
-                </div>
-            </div>
-            <div class="columns is-mobile">
-                <div class="column">
-                    Team E
-                </div>
-                <div class="column">
-                    <font-awesome-icon icon="skull-crossbones" size="1x" /> {{totalPenalty[5]}}
-                </div>
-                <div class="column">
-                    <font-awesome-icon icon="lightbulb" size="1x" /> {{totalHint[5].length}}
-                </div>
-                <div class="column">
-                    {{resultLock(5)}}
-                </div>
-            </div>
-            <div class="columns is-mobile">
-                <div class="column">
-                    Team F
-                </div>
-                <div class="column">
-                    <font-awesome-icon icon="skull-crossbones" size="1x" /> {{totalPenalty[6]}}
-                </div>
-                <div class="column">
-                    <font-awesome-icon icon="lightbulb" size="1x" /> {{totalHint[6].length}}
-                </div>
-                <div class="column">
-                    {{resultLock(6)}}
-                </div>
-            </div>
         </div>
     </div>
 </template>
@@ -95,24 +65,47 @@
 <script>
 import io from 'socket.io-client'
 import axios from 'axios'
+import VueCircle from 'vue2-circle-progress/src/index.vue'
+import passRoom from '../../db/user.json'
 
 const HTTP_HOST = process.env.VUE_APP_HTTP_HOST
 
 export default {
+    components: {
+      VueCircle
+    },
     data() {
         return {
+            fill : { gradient: ["#56dfbf"] },
+            fillteam:  { gradient: ["#ccc"] },
             statusServer: null,
-            remainTime: 'wait',
+            remainTime: '00:00',
             timeStart: null,
             timeFinish: null,
             interval: null,
             socket: io(HTTP_HOST),
-            totalPenalty: [0,0,0,0,0,0],
-            totalHint: [[], [], [], [], [], []],
-            totalLock: [false, false, false, false, false, false, false],
+            totalPenalty: [],
+            totalHint: [],
+            totalLock: [],
+            classTimer: ['timer'],
+            passRoom: [],
         }
     },
     mounted() {
+        // this.passRoom = passRoom
+        var temp = []
+        for(var i=0;i<passRoom.length;i++){
+            if(passRoom[i].active == true){
+                passRoom[i].id = i
+                temp.push(passRoom[i])
+                this.totalPenalty[i] = 0
+                this.totalHint[i] = []
+                this.totalLock[i] = false
+            }
+        }
+        this.passRoom = temp
+        // console.log(temp)
+        
         this.socket.on('getStatusGame', (data) => {
             this.statusGame = data.gameStart
             this.timeFinish = data.timeFinish
@@ -149,12 +142,25 @@ export default {
         this.socket.on('ADMIN_HINT', (data) => {
             this.totalHint = data
         })
-        this.socket.on('ADMIN_COMPLETE', (data) => {
-            this.totalLock = data
+        this.socket.on('ADMIN_COMPLETE', (res) => {
+            // console.log(res)
+            // console.log(window["circle0"])
+            this.totalLock = res.data
+            this.changeColor()
         })
 
     },
     methods: {
+        changeColor() {
+            // this.$refs.circle.updateFill("hsl(348, 100%, 61%)")
+            this.$refs.objCircle.updateFill("hsl(348, 100%, 61%)");
+        },
+        progress(event,progress,stepValue){
+            // console.log(stepValue);
+        },
+        progress_end(event){
+            // console.log("Circle progress end");
+        },
         callInfoGame() {
             this.socket.emit('SETTING');
         },
@@ -172,16 +178,23 @@ export default {
             // var date = Math.floor(Date.now() / 1000)
             this.timeStart = Math.floor(Date.now() / 1000)
             var time = parseInt(this.timeFinish)-parseInt(this.timeStart)
-            
+            this.$refs.myUniqueID.updateProgress(Math.floor(100*time/3600));
             var minutes = Math.floor(time / 60)
             var seconds = time - minutes * 60
             this.remainTime = pad(minutes)+":"+pad(seconds)
+
+            if( (minutes > 10) && (this.timeFinish > this.timeStart) ){
+                
+            } else {
+                this.classTimer = ['timer', 'is-danger']
+                this.$refs.myUniqueID.updateFill("hsl(348, 100%, 61%)");
+            }
         },
         resultLock(team){
             if(!this.totalLock[team]) {
-                return 'Lock'
+                return 'lock'
             } else {
-                return 'UNLOCK!'
+                return 'unlock'
             }
         }
     }
