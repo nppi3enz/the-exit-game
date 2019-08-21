@@ -67,7 +67,7 @@
     <div v-bind:class="{modal: true, 'is-active': show_hint }">
         <div class="modal-background"></div>
         <div class="modal-content" style="background: #fff;padding: 10px;text-align: center;">
-            <div style="font-size:1.5em;color:#888;padding: 10px;">เลือกหมายเลขที่ต้องการค่ะ</div>
+            <div style="font-size:1.5em;color:#888;padding: 10px;">เลือกหมายเลขที่ต้องการ</div>
             <button class="button" v-for="hint_item in hint" v-on:click="callHintNum(hint_item)" >
                 {{ hint_item }}
             </button>
