@@ -199,9 +199,26 @@ body, html{
         .title-team{
             font-size: 2em;
         }
-        .icon{
-            font-size: 1.5rem;
-            margin-top: -10px;
+        .lock-box{
+            border:5px solid #ccc;
+            &.lock{
+                border-color: #5a5a5a;
+                color: #e0e0e0;
+            }
+            &.unlock{
+                border-color: #56dfbf;
+                color: #56dfbf;
+            }
+            border-radius: 50%;
+            display: block;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto;
+            padding-top:60px;
+            .icon{
+                font-size: 1.5rem;
+                margin-top: -10px;
+            }
         }
         .columns.score{
             .column{

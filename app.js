@@ -22,14 +22,23 @@ var setting_game = {
 
 const hints = require('./db/hints')
 const codes = require('./db/codes')
+const users = require('./db/user')
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
-var sessionTeam = [];
-var totalPenalty = [0,0,0,0,0,0,0]
-var totalHint = [[],[],[],[],[],[],[]]
-var resultTeam = [false, false, false, false, false, false, false]
+var sessionTeam = []
+var sessionAdmin
+
+var totalPenalty = []
+var totalHint = []
+var resultTeam = []
+
+for(var i=0;i<users.length;i++){
+    totalPenalty[i] = 0
+    totalHint[i] = []
+    resultTeam[i] = false
+}
 // var date = new Date()
 
 // var setting_game = {
@@ -42,16 +51,32 @@ io.on('connection', function(socket) {
         io.emit('SETTING', setting_game)
     });
     socket.on('SETTING', function(team) {
-        io.to(sessionTeam[team]).emit('getSettingGame', 
-        {
-            setting_game: setting_game,
-            hint: totalHint[team]
-        })
+        if(team == 'admin'){
+            io.to(sessionAdmin).emit('getSettingGame', 
+            {
+                setting_game: setting_game,
+                hint: totalHint[team],
+                info_game: {
+                    totalPenalty: totalPenalty,
+                    totalHint: totalHint,
+                    resultTeam: resultTeam
+                }
+            })
+        } else {
+            io.to(sessionTeam[team]).emit('getSettingGame', 
+            {
+                setting_game: setting_game,
+                hint: totalHint[team]
+            })
+        }
     });
     socket.on('LOGIN', function(result) {
         // io.emit('getStatusGame', setting_game)
-        // console.log(result)
-        sessionTeam[result.team] = result.clientId
+        if(result.team != 'admin'){
+            sessionTeam[result.team] = result.clientId
+        } else {
+            sessionAdmin = result.clientId
+        }
     });
     socket.on('PENALTY', function(result) {
         console.log('PENALTY')
