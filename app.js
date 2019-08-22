@@ -34,10 +34,12 @@ var totalPenalty = []
 var totalHint = []
 var resultTeam = []
 
-for(var i=0;i<users.length;i++){
-    totalPenalty[i] = 0
-    totalHint[i] = []
-    resultTeam[i] = false
+function resetGame(){
+    for(var i=0;i<users.length;i++){
+        totalPenalty[i] = 0
+        totalHint[i] = []
+        resultTeam[i] = false
+    }
 }
 // var date = new Date()
 
@@ -164,9 +166,21 @@ app.get('/reset', (req, res) => {
     setting_game = {
         'gameStart': false,
         'timeStart': 0,
-        'timeFinish': 0
+        'timeFinish': 0,
     }
+    resetGame();
+    
     io.emit('getStatusGame', setting_game)
+    //refresh admin
+    io.to(sessionAdmin).emit('getSettingGame', 
+    {
+        setting_game: setting_game,
+        info_game: {
+            totalPenalty: totalPenalty,
+            totalHint: totalHint,
+            resultTeam: resultTeam
+        }
+    })
     io.emit('GAME', 'reset')
     res.send('Reseted')
 })

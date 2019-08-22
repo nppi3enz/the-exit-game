@@ -21,7 +21,7 @@
         </div>
         <div class="container teams">
             <div class="columns is-multiline is-centered is-mobile">
-                <div v-for="item in passRoom" class="column is-one-quarter has-text-centered">
+                <div v-for="item in passRoom" class="column has-text-centered">
                     <div class="title-team">
                         Team {{item.team}}
                     </div>
