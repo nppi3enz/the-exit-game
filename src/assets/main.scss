@@ -230,25 +230,25 @@ body, html{
     background: rgba(46,59,68,0.9) !important;
     border:3px solid #6f7887 !important;
     color: #fff !important;
-    border-radius: 0px;
+    border-radius: 0px !important;
     .swal2-title{
         color: #fff !important;
     }
     .swal2-content{
         color: #fff !important;
         input{
-            border-radius: 0px;
+            border-radius: 0px !important;
             border:2px solid #fff !important;
         }
     }
     .swal2-confirm{
-        background: transparent;
-        border-radius: 0px;
+        background: transparent !important;
+        border-radius: 0px !important;
         border:2px solid #fff !important;
     }
     .swal2-cancel{
-        background: transparent;
-        border-radius: 0px;
+        background: transparent !important;
+        border-radius: 0px !important;
         border:2px solid #6f7887 !important;
     }
 
