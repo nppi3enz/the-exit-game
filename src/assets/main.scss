@@ -227,15 +227,15 @@ body, html{
     }
 }
 .swal2-modal{
-    background: rgba(46,59,68,0.9);
-    border:3px solid #6f7887;
-    color: #fff;
+    background: rgba(46,59,68,0.9) !important;
+    border:3px solid #6f7887 !important;
+    color: #fff !important;
     border-radius: 0px;
     .swal2-title{
-        color: #fff;
+        color: #fff !important;
     }
     .swal2-content{
-        color: #fff;
+        color: #fff !important;
         input{
             border-radius: 0px;
             border:2px solid #fff !important;
