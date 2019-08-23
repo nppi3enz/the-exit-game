@@ -20,6 +20,8 @@ var setting_game = {
     'timeFinish': null
 }
 
+var helpTime = []
+
 const hints = require('./db/hints')
 const codes = require('./db/codes')
 const users = require('./db/user')
@@ -169,7 +171,7 @@ app.get('/reset', (req, res) => {
         'timeFinish': 0,
     }
     resetGame();
-    
+
     io.emit('getStatusGame', setting_game)
     //refresh admin
     io.to(sessionAdmin).emit('getSettingGame', 
@@ -226,3 +228,22 @@ app.get('/status/:msg', (req, res) => {
     // res.json(Object.assign(books[updateIndex], req.body))
     // res.send('{"card":12, "desc":"MACH_12"}')
 // })
+function checkTime(i) {
+    if (i < 10) {
+      i = "0" + i;
+    }
+    return i;
+}
+app.get('/help/:team', (req, res) => {
+    var today = new Date();
+    var h = checkTime(today.getHours());
+    var m = checkTime(today.getMinutes());
+    var s = checkTime(today.getSeconds());
+
+    helpTime.unshift({
+        team: req.params.team,
+        time: h + ":" + m + ":" + s
+    })
+    io.emit('ADMIN_HELP', helpTime)
+    res.send('Complete')
+})

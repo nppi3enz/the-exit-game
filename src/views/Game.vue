@@ -207,9 +207,12 @@ export default {
     },
     methods: {
         callHelp() {
-            this.$swal({
-                title: 'ขณะนี้ได้เรียกทีมงานแล้ว',
-                text: 'รอแปปนึงนะ :)'
+            axios.get(`${HTTP_HOST}/help/${this.team}`)
+            .then(result => {
+                this.$swal({
+                    title: 'ขณะนี้ได้เรียกทีมงานแล้ว',
+                    text: 'รอแปปนึงนะ :)'
+                })
             })
         },
         callPenalty() {

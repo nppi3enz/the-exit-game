@@ -22,6 +22,10 @@
         <a class="button" @click="notice()"><font-awesome-icon icon="paper-plane" />&nbsp;ส่งข้อความ</a>&nbsp;
         <span style="color: #888;">{{notice_status}}</span>
         <hr>
+        <h2>ขอความช่วยเหลือ</h2>
+        <ul>
+            <li v-for="value in helpTime">- ทีม {{name_team[value.team].team}} ขอความช่วยเหลือเมื่อเวลา {{value.time}} น.</li>
+        </ul>
     </div>
 </template>
 
@@ -36,6 +40,7 @@
 <script>
 import io from 'socket.io-client'
 import axios from 'axios'
+import passRoom from '../../db/user.json'
 
 const HTTP_HOST = process.env.VUE_APP_HTTP_HOST
 
@@ -58,14 +63,16 @@ export default {
             numPenalty: 0,
             timePenalty: 0,
             checkFlagPenalty: false,
-            name_team: ['Demo','A','B','C','D','E','F'],
+            // name_team: ['Demo','A','B','C','D','E','F'],
             hint: [],
             send_min: '',
             notice_msg: '',
             notice_status: '',
+            helpTime: []
         }
     },
     mounted() {
+        this.name_team = passRoom
         this.socket.on('getStatusGame', (data) => {
             this.statusGame = data.gameStart
             this.timeFinish = data.timeFinish
@@ -82,6 +89,9 @@ export default {
                 this.countdownTime()
             }
         });
+        this.socket.on('ADMIN_HELP', (data) => {
+            this.helpTime = data
+        })
         this.socket.on('connect', () => {
             if(this.socket.connected){
                 this.statusServer = "online"
