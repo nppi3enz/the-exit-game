@@ -400,6 +400,7 @@ export default {
                     if(result.value.id == '5130') {
                         this.socket.emit('COMPLETE', this.team)
                         clearInterval(parent.interval)
+                        this.message = 'หนีออกได้สำเร็จ'
                     }
                     if (result.value.result) {
                         this.$swal({
