@@ -346,7 +346,8 @@ export default {
                 }).then((code) => {
                     if(code.value == 40){ //musicbox
                         this.game_musicbox = true
-                    } else if(code.value == 31){ //puzzle
+                    //} else if(code.value == 31){ //puzzle
+                    } else if(code.value == 63){
                         this.game_puzzle = true
                     } else {
                         if(!code.dismiss) {
