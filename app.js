@@ -42,6 +42,7 @@ function resetGame(){
         totalHint[i] = []
         resultTeam[i] = false
     }
+    helpTime = []
 }
 // var date = new Date()
 
