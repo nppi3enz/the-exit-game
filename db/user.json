@@ -2,7 +2,7 @@
     {
         "user": "demo",
         "team": "Demo",
-        "active": false
+        "active": true
     },
     {
         "user": "aaa",
